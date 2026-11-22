@@ -1,14 +1,24 @@
 # ForkFlow - Cloudflare Workers 配置
-# KV id 由 GitHub Actions 从 Secret CLOUDFLARE_KV_NAMESPACE_ID 注入，无需改此文件。GITHUB_TOKEN 在 Worker Settings → Variables 里配。
+# KV id 已直接写入（GitHub Actions 仍会用 Secret CLOUDFLARE_KV_NAMESPACE_ID 兜底注入）
 name = "forkflow"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
-account_id = ""
+account_id = "85c9a2ec4019781a562b8c6ad653e3c2"
+
+# 只走自定义域名，不暴露 workers.dev
+workers_dev = false
+
+[[routes]]
+pattern = "q7m2x9k4p3.wdss.fun"
+custom_domain = true
 
 [[kv_namespaces]]
 binding = "REPOS_KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "ec82861dd99b41c59c7dd5cbd7a1305f"
+
+[observability]
+enabled = true
 
 # 若 refresh 仍报 “Too many subrequests”，说明单批 GitHub 请求仍偏多，可把下面 limit 再调小，
 # 或在付费 Worker 上提高 subrequests（见 https://developers.cloudflare.com/workers/wrangler/configuration/#limits）
